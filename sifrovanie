@@ -1,3 +1,19 @@
+from PIL import Image
+img=Image.open("vystup.png")
+sirka, vyska=img.size
+pixels=img.load()
+
+def kodovacka(sprava):
+    temp=[]
+    for i in sprava:
+        binarny_znak=bin(ord(i))[2::]
+        if len(binarny_znak)<8:
+            chýba= 8-len(binarny_znak)
+            kompletka=chýba*"0" + binarny_znak
+        for j in kompletka:
+            temp.append(int(j))
+    return temp
+
 def drticka(sprava):
     binarna_sprava = kodovacka(sprava)
     index = 0
@@ -5,14 +21,14 @@ def drticka(sprava):
     for y in range(vyska):
         for x in range(sirka):
             if index >= len(binarna_sprava):
-                break  # ak je index dlhsi ako binarna sprava, tak skoncime
+                break  # ak index vacsi ako sprava, tak skoncime
 
-            r, g, b = pixels[x, y]  # rozdelime na R, G, B
+            r, g, b = pixels[x, y]  # snazime sa rozdelit na R, G, B
 
 
             if b % 2 == 0:
                 if binarna_sprava[index] == 1:
-                    novy_b = b + 1 #ak je b parny, tak do noveho b pridame 1
+                    novy_b = b + 1 #ak je b parny-do noveho b pridame 1
                 else:
                     novy_b = b
             else:
@@ -27,4 +43,6 @@ def drticka(sprava):
         if index >= len(binarna_sprava):
             break
 
-    img.save("zakodovane.png")
+sprava=input("Zadaj mi správu na kódovanie (Extended ASCII)")
+print(kodovacka(sprava))
+img.save("hotovko.png")
